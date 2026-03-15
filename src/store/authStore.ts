@@ -83,7 +83,9 @@ function consumeInviteCode(code: string): boolean {
 }
 
 function createInviteCode(): string {
-  const code = crypto.randomUUID?.() ?? Math.random().toString(36).slice(2).toUpperCase();
+  const code = (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function')
+    ? crypto.randomUUID()
+    : Math.random().toString(36).slice(2).toUpperCase();
   const codes = loadInvites();
   codes.push(code);
   saveInvites(codes);
