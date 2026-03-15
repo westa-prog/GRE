@@ -21,7 +21,7 @@ const MODES: { id: Mode; label: string; icon: React.ElementType; desc: string; c
 export default function PracticePage() {
   const { getNextQuestion } = useAdaptiveEngine();
   const { currentQuestion, theta, history, resetSession } = useAdaptiveStore();
-  const { updateTopicMastery, recordPracticeResult } = useUserStore();
+  const { stats, updateTopicMastery, recordSessionResult } = useUserStore();
   const [started, setStarted] = useState(false);
   const [selectedMode, setSelectedMode] = useState<Mode>('all');
   const [sessionDone, setSessionDone] = useState(false);
@@ -40,13 +40,26 @@ export default function PracticePage() {
   const handleNext = () => {
     if (history.length > 0) {
       const last = history[history.length - 1];
-      recordPracticeResult(last.isCorrect);
       updateTopicMastery(last.question.topic, last.isCorrect ? 5 : -2);
     }
     getNextQuestion();
   };
 
-  const handleFinish = () => setSessionDone(true);
+  const handleFinish = () => {
+    if (history.length > 0) {
+      const quantScore = selectedMode === 'verbal' ? stats.currentScoreQuant : estimatedScore;
+      const verbalScore = selectedMode === 'quant' ? stats.currentScoreVerbal : estimatedScore;
+
+      recordSessionResult({
+        quantScore,
+        verbalScore,
+        questionsAnswered: history.length,
+        correctAnswers: correct,
+      });
+    }
+
+    setSessionDone(true);
+  };
 
   // Pre-session landing
   if (!started) {

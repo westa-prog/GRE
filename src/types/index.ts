@@ -32,6 +32,8 @@ export interface UserStats {
   questionsAnswered: number;
   accuracy: number; // percentage
   studyStreakDays: number;
+  lastPracticeDate?: string;
+  practiceDates: string[];
   recentScores: { date: string; quant: number; verbal: number }[];
   topicMastery: Record<string, number>; // topic -> mastery level (0-100)
 }

@@ -9,10 +9,12 @@ import {
   PenTool, 
   MonitorPlay, 
   BarChart3,
-  Lightbulb
+  Lightbulb,
+  LogOut
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useState } from 'react';
+import { useAuthStore } from '@/store/authStore';
 
 const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
@@ -27,6 +29,11 @@ const navItems = [
 export function Sidebar() {
   const pathname = usePathname();
   const [isHovered, setIsHovered] = useState(false);
+  const { currentUser, membership, logout } = useAuthStore((state) => ({
+    currentUser: state.currentUser,
+    membership: state.membership,
+    logout: state.logout,
+  }));
 
   return (
     <aside 
@@ -84,15 +91,24 @@ export function Sidebar() {
       <div className="p-4 border-t border-border/50">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-full bg-secondary shrink-0 overflow-hidden border-2 border-border/50">
-            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" />
+            <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${currentUser ?? 'user'}`} alt="User" />
           </div>
           <div className={clsx(
             "flex flex-col whitespace-nowrap transition-opacity duration-300",
             isHovered ? "opacity-100" : "opacity-0 w-0 hidden"
           )}>
-            <span className="text-sm font-semibold text-foreground">Aiden Smith</span>
-            <span className="text-xs text-muted-foreground">Pro Member</span>
+            <span className="text-sm font-semibold text-foreground">{currentUser || 'Guest'}</span>
+            <span className="text-xs text-muted-foreground">{membership ?? 'Free Member'}</span>
           </div>
+          {isHovered && currentUser && (
+            <button
+              onClick={logout}
+              className="ml-auto p-2 rounded-full hover:bg-secondary transition-colors"
+              aria-label="Logout"
+            >
+              <LogOut className="w-4 h-4 text-muted-foreground" />
+            </button>
+          )}
         </div>
       </div>
     </aside>

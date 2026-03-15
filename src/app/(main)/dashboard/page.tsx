@@ -5,6 +5,7 @@ import { StatCards } from '@/components/dashboard/StatCards';
 import { ScoreChart } from '@/components/dashboard/ScoreChart';
 import { StudyPlan } from '@/components/dashboard/StudyPlan';
 import { PerformanceSummary } from '@/components/dashboard/PerformanceSummary';
+import { useUserStore } from '@/store/userStore';
 import { BrainCircuit, BookOpen, PenTool, MonitorPlay, BarChart3, Lightbulb, ArrowRight, Flame, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -17,11 +18,24 @@ const QUICK_ACTIONS = [
   { href: '/resources', icon: Lightbulb, label: 'Resources', description: 'Tips & strategies', color: 'from-cyan-500/20 to-cyan-500/5', border: 'border-cyan-500/20', iconColor: 'text-cyan-500' },
 ];
 
-const THIS_WEEK = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-const studied = [true, true, true, false, true, false, false];
-const todayIdx = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
+const WEEK_DAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
+function getLastSevenDays() {
+  const today = new Date();
+  return Array.from({ length: 7 }).map((_, i) => {
+    const date = new Date(today);
+    date.setDate(today.getDate() - (6 - i));
+    return date.toISOString().slice(0, 10);
+  });
+}
 
 export default function DashboardPage() {
+  const { stats } = useUserStore();
+  const lastSeven = getLastSevenDays();
+  const practiced = new Set(stats.practiceDates ?? []);
+  const studied = lastSeven.map((d) => practiced.has(d));
+  const todayIdx = lastSeven.length - 1;
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
 
@@ -44,7 +58,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-2 bg-card/60 backdrop-blur-sm border border-border/50 rounded-2xl px-4 py-3">
               <Flame className="w-5 h-5 text-orange-500" />
               <div>
-                <div className="text-sm font-bold text-foreground">4-Day Streak</div>
+                <div className="text-sm font-bold text-foreground">{stats.studyStreakDays}-Day Streak</div>
                 <div className="text-xs text-muted-foreground">Keep it going!</div>
               </div>
             </div>
@@ -52,7 +66,7 @@ export default function DashboardPage() {
             <div className="flex items-center gap-2 bg-card/60 backdrop-blur-sm border border-border/50 rounded-2xl px-4 py-3">
               <Calendar className="w-4 h-4 text-muted-foreground shrink-0" />
               <div className="flex gap-1.5">
-                {THIS_WEEK.map((day, i) => (
+                {WEEK_DAYS.map((day, i) => (
                   <div key={i} className="flex flex-col items-center gap-1">
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all
                       ${i === todayIdx ? 'ring-2 ring-primary' : ''}
