@@ -24,7 +24,7 @@ export function TopicRadarChart() {
     <div className="bg-card py-6 rounded-2xl border border-border/50 shadow-sm w-full h-[400px] flex flex-col">
       <h3 className="text-lg font-bold px-6 mb-2">Topic Mastery Radar</h3>
       <div className="flex-1 w-full min-h-0">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={300}>
           <RadarChart cx="50%" cy="50%" outerRadius="70%" data={data}>
             <PolarGrid stroke="hsl(var(--border))" />
             <PolarAngleAxis dataKey="subject" tick={{ fill: 'hsl(var(--foreground))', fontSize: 11 }} />

@@ -37,8 +37,8 @@ export function ScoreChart() {
         </select>
       </div>
       
-      <div className="flex-1 w-full min-h-0">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="flex-1 w-full">
+        <ResponsiveContainer width="100%" aspect={2}>
           <AreaChart
             data={data}
             margin={{

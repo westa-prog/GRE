@@ -14,8 +14,10 @@ interface QuestionCardProps {
 export function QuestionCard({ question, onNext }: QuestionCardProps) {
   const { submitAnswer } = useAdaptiveStore();
   const [selected, setSelected] = useState<string | string[]>('');
+  const [essay, setEssay] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   
+  const isEssay = question.format === 'essay';
   const isMultipleSelect = question.format === 'multiple-select' || question.format === 'text-completion' || question.format === 'sentence-equivalence';
 
   const handleSelect = (opt: string) => {
@@ -34,6 +36,11 @@ export function QuestionCard({ question, onNext }: QuestionCardProps) {
   };
 
   const isCorrect = () => {
+    if (isEssay) {
+      // We cannot automatically grade an essay, so treat short responses as incorrect
+      return essay.trim().length > 50;
+    }
+
     if (isMultipleSelect) {
       const target = Array.isArray(question.correctAnswer) ? question.correctAnswer : [question.correctAnswer];
       const current = Array.isArray(selected) ? selected : [];
@@ -48,6 +55,7 @@ export function QuestionCard({ question, onNext }: QuestionCardProps) {
       onNext();
       setIsSubmitted(false);
       setSelected(isMultipleSelect ? [] : '');
+      setEssay('');
       return;
     }
     
@@ -115,6 +123,27 @@ export function QuestionCard({ question, onNext }: QuestionCardProps) {
             })}
           </div>
         )}
+
+        {isEssay && (
+          <div className="mb-8">
+            <textarea
+              value={essay}
+              disabled={isSubmitted}
+              onChange={(e) => setEssay(e.target.value)}
+              placeholder="Write your essay response here..."
+              className="w-full min-h-[220px] bg-background border border-border rounded-xl p-4 resize-none text-base leading-relaxed focus:outline-none focus:ring-2 focus:ring-primary/50"
+            />
+            {isSubmitted && (
+              <div className="mt-3 text-sm font-medium">
+                {isCorrect() ? (
+                  <span className="text-green-500 flex items-center gap-2"><Check className="w-4 h-4"/> Response saved.</span>
+                ) : (
+                  <span className="text-destructive flex items-center gap-2"><X className="w-4 h-4"/> Try expanding your response (at least 50 characters).</span>
+                )}
+              </div>
+            )}
+          </div>
+        )}
         
         {question.format === 'numeric-entry' && (
           <div className="mb-8 p-4 bg-secondary/30 rounded-xl border border-border/50 max-w-sm">
@@ -155,13 +184,21 @@ export function QuestionCard({ question, onNext }: QuestionCardProps) {
       <div className="mt-auto border-t border-border/50 pt-6 flex justify-end">
         <button
           onClick={handleSubmit}
-          disabled={!isSubmitted && (!selected || selected.length === 0)}
+          disabled={
+            !isSubmitted && (
+              (isEssay && essay.trim().length === 0) ||
+              (!isEssay && (!selected || (Array.isArray(selected) && selected.length === 0)))
+            )
+          }
           className={clsx(
             "px-8 py-3 rounded-xl font-bold transition-all shadow-lg",
             isSubmitted 
               ? "bg-foreground text-background hover:bg-foreground/90" 
               : "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-primary/25",
-            (!isSubmitted && (!selected || selected.length === 0)) && "opacity-50 cursor-not-allowed"
+            (!isSubmitted && (
+              (isEssay && essay.trim().length === 0) ||
+              (!isEssay && (!selected || (Array.isArray(selected) && selected.length === 0)))
+            )) && "opacity-50 cursor-not-allowed"
           )}
         >
           {isSubmitted ? 'Continue to Next' : 'Submit Answer'}

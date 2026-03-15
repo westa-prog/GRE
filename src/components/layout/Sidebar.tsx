@@ -8,7 +8,8 @@ import {
   BookOpen, 
   PenTool, 
   MonitorPlay, 
-  BarChart3 
+  BarChart3,
+  Lightbulb
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useState } from 'react';
@@ -20,6 +21,7 @@ const navItems = [
   { name: 'Writing (AWA)', href: '/writing', icon: PenTool },
   { name: 'Simulator', href: '/simulator', icon: MonitorPlay },
   { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+  { name: 'Resources & Tips', href: '/resources', icon: Lightbulb },
 ];
 
 export function Sidebar() {
