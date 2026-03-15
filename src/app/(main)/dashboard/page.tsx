@@ -41,12 +41,17 @@ export default function DashboardPage() {
 
   const [inviteCodes, setInviteCodes] = useState<string[]>([]);
   const [copied, setCopied] = useState<string | null>(null);
+  const [cryptoAvailable, setCryptoAvailable] = useState(false);
 
   useEffect(() => {
     if (role === 'admin') {
       setInviteCodes(getInviteCodes());
     }
   }, [getInviteCodes, role]);
+
+  useEffect(() => {
+    setCryptoAvailable(typeof window !== 'undefined' && typeof window.crypto?.randomUUID === 'function');
+  }, []);
 
   const refreshInvites = () => setInviteCodes(getInviteCodes());
 
@@ -151,7 +156,12 @@ export default function DashboardPage() {
                 </div>
                 <button
                   onClick={handleGenerateInvite}
-                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
+                  disabled={!cryptoAvailable}
+                  className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors ${
+                    cryptoAvailable
+                      ? 'bg-primary hover:bg-primary/90'
+                      : 'bg-muted text-muted-foreground cursor-not-allowed'
+                  }`}
                 >
                   <Plus className="w-4 h-4" /> Generate
                 </button>
@@ -178,6 +188,11 @@ export default function DashboardPage() {
                 )}
               </div>
 
+              {!cryptoAvailable && (
+                <div className="mt-3 text-xs text-yellow-300">
+                  Invite generation is disabled in this browser (missing crypto.randomUUID).
+                </div>
+              )}
               {copied && (
                 <div className="mt-3 text-xs text-emerald-400">
                   Copied <span className="font-mono">{copied}</span> to clipboard.
