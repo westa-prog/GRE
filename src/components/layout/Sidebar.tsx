@@ -29,9 +29,10 @@ const navItems = [
 export function Sidebar() {
   const pathname = usePathname();
   const [isHovered, setIsHovered] = useState(false);
-  const { currentUser, membership, logout } = useAuthStore((state) => ({
+  const { currentUser, membership, role, logout } = useAuthStore((state) => ({
     currentUser: state.currentUser,
     membership: state.membership,
+    role: state.role,
     logout: state.logout,
   }));
 
@@ -98,7 +99,7 @@ export function Sidebar() {
             isHovered ? "opacity-100" : "opacity-0 w-0 hidden"
           )}>
             <span className="text-sm font-semibold text-foreground">{currentUser || 'Guest'}</span>
-            <span className="text-xs text-muted-foreground">{membership ?? 'Free Member'}</span>
+            <span className="text-xs text-muted-foreground">{role === 'admin' ? 'Admin' : membership ?? 'Free Member'}</span>
           </div>
           {isHovered && currentUser && (
             <button

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
-import { Lock, User } from 'lucide-react';
+import { Lock, User, Key } from 'lucide-react';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -14,6 +14,16 @@ export default function SignupPage() {
     signup: state.signup,
     loadFromStorage: state.loadFromStorage,
   }));
+
+  const [inviteCode, setInviteCode] = useState('');
+  const [requiresInvite, setRequiresInvite] = useState(true);
+
+  useEffect(() => {
+    // Determine if there are existing users; if not, allow initial admin signup without an invite
+    const rawUsers = typeof window !== 'undefined' ? window.localStorage.getItem('gre_users') : null;
+    const userCount = rawUsers ? Object.keys(JSON.parse(rawUsers)).length : 0;
+    setRequiresInvite(userCount > 0);
+  }, []);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -39,7 +49,7 @@ export default function SignupPage() {
       return;
     }
 
-    const result = signup(username.trim(), password);
+    const result = signup(username.trim(), password, inviteCode.trim() || undefined);
     if (!result.success) {
       setError(result.message || 'Signup failed.');
       return;
@@ -99,6 +109,25 @@ export default function SignupPage() {
             />
           </div>
         </div>
+
+        {requiresInvite && (
+          <div className="space-y-1">
+            <label className="text-sm font-medium">Invite Code</label>
+            <div className="relative">
+              <Key className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <input
+                value={inviteCode}
+                onChange={(e) => setInviteCode(e.target.value)}
+                className="w-full pl-10 pr-3 py-3 rounded-xl border border-border/50 bg-background/70 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                placeholder="Enter invite code"
+                required
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Invite code is required to create an account. If you are the first user, leave this blank.
+            </p>
+          </div>
+        )}
 
         {error && <div className="text-sm text-destructive font-medium">{error}</div>}
 

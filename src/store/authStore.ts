@@ -6,22 +6,27 @@ import type { UserStats } from '@/types';
 
 const USERS_KEY = 'gre_users';
 const CURRENT_USER_KEY = 'gre_current_user';
+const INVITES_KEY = 'gre_invites';
 
 export interface StoredUser {
   username: string;
   password: string;
   membership?: string;
+  role?: 'admin' | 'user';
   stats: UserStats;
 }
 
 export interface AuthStore {
   currentUser: string | null;
   membership?: string;
+  role?: 'admin' | 'user';
   isLoaded: boolean;
   login: (username: string, password: string) => { success: boolean; message?: string };
-  signup: (username: string, password: string, membership?: string) => { success: boolean; message?: string };
+  signup: (username: string, password: string, inviteCode?: string) => { success: boolean; message?: string };
   logout: () => void;
   loadFromStorage: () => void;
+  generateInviteCode: () => string;
+  getInviteCodes: () => string[];
 }
 
 function loadUsers(): Record<string, StoredUser> {
@@ -39,6 +44,26 @@ function saveUsers(users: Record<string, StoredUser>) {
   window.localStorage.setItem(USERS_KEY, JSON.stringify(users));
 }
 
+function loadInvites(): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(INVITES_KEY);
+    return raw ? (JSON.parse(raw) as string[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveInvites(codes: string[]) {
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(INVITES_KEY, JSON.stringify(codes));
+}
+
+function getCurrentUserFromStorage(): string | null {
+  if (typeof window === 'undefined') return null;
+  return window.localStorage.getItem(CURRENT_USER_KEY);
+}
+
 function setCurrentUser(username: string | null) {
   if (typeof window === 'undefined') return;
   if (username) {
@@ -48,14 +73,27 @@ function setCurrentUser(username: string | null) {
   }
 }
 
-function getCurrentUserFromStorage(): string | null {
-  if (typeof window === 'undefined') return null;
-  return window.localStorage.getItem(CURRENT_USER_KEY);
+function consumeInviteCode(code: string): boolean {
+  const codes = loadInvites();
+  const index = codes.indexOf(code);
+  if (index === -1) return false;
+  codes.splice(index, 1);
+  saveInvites(codes);
+  return true;
+}
+
+function createInviteCode(): string {
+  const code = crypto.randomUUID?.() ?? Math.random().toString(36).slice(2).toUpperCase();
+  const codes = loadInvites();
+  codes.push(code);
+  saveInvites(codes);
+  return code;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
   currentUser: null,
   membership: undefined,
+  role: undefined,
   isLoaded: false,
 
   login: (username, password) => {
@@ -70,7 +108,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
       return { success: false, message: 'Incorrect password.' };
     }
 
-    set({ currentUser: username, membership: user.membership ?? undefined, isLoaded: true });
+    set({
+      currentUser: username,
+      membership: user.membership ?? undefined,
+      role: user.role ?? 'user',
+      isLoaded: true,
+    });
     setCurrentUser(username);
 
     useUserStore.getState().setStats(user.stats);
@@ -78,23 +121,43 @@ export const useAuthStore = create<AuthStore>((set) => ({
     return { success: true };
   },
 
-  signup: (username, password, membership) => {
+  signup: (username, password, inviteCode) => {
     const users = loadUsers();
+
     if (users[username]) {
       return { success: false, message: 'Username already taken.' };
+    }
+
+    const isFirstUser = Object.keys(users).length === 0;
+    const isAdmin = isFirstUser;
+
+    if (!isFirstUser) {
+      if (!inviteCode) {
+        return { success: false, message: 'Invite code is required.' };
+      }
+
+      if (!consumeInviteCode(inviteCode)) {
+        return { success: false, message: 'Invalid or expired invite code.' };
+      }
     }
 
     const newUser: StoredUser = {
       username,
       password,
-      membership: membership ?? 'Free',
+      membership: isAdmin ? 'Admin' : 'Free',
+      role: isAdmin ? 'admin' : 'user',
       stats: initialStats,
     };
 
     users[username] = newUser;
     saveUsers(users);
 
-    set({ currentUser: username, membership: newUser.membership, isLoaded: true });
+    set({
+      currentUser: username,
+      membership: newUser.membership,
+      role: newUser.role,
+      isLoaded: true,
+    });
     setCurrentUser(username);
     useUserStore.getState().setStats(newUser.stats);
 
@@ -102,7 +165,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   },
 
   logout: () => {
-    set({ currentUser: null, membership: undefined, isLoaded: true });
+    set({ currentUser: null, membership: undefined, role: undefined, isLoaded: true });
     setCurrentUser(null);
     useUserStore.getState().resetStats();
   },
@@ -110,19 +173,32 @@ export const useAuthStore = create<AuthStore>((set) => ({
   loadFromStorage: () => {
     const username = getCurrentUserFromStorage();
     if (!username) {
-      set({ currentUser: null, membership: undefined, isLoaded: true });
+      set({ currentUser: null, membership: undefined, role: undefined, isLoaded: true });
       return;
     }
 
     const users = loadUsers();
     const user = users[username];
     if (!user) {
-      set({ currentUser: null, membership: undefined, isLoaded: true });
+      set({ currentUser: null, membership: undefined, role: undefined, isLoaded: true });
       setCurrentUser(null);
       return;
     }
 
-    set({ currentUser: username, membership: user.membership, isLoaded: true });
+    set({
+      currentUser: username,
+      membership: user.membership,
+      role: user.role ?? 'user',
+      isLoaded: true,
+    });
     useUserStore.getState().setStats(user.stats);
-  }
+  },
+
+  generateInviteCode: () => {
+    return createInviteCode();
+  },
+
+  getInviteCodes: () => {
+    return loadInvites();
+  },
 }));
