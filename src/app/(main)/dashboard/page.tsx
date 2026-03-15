@@ -156,14 +156,13 @@ export default function DashboardPage() {
                 </div>
                 <button
                   onClick={handleGenerateInvite}
-                  disabled={!cryptoAvailable}
                   className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors ${
                     cryptoAvailable
                       ? 'bg-primary hover:bg-primary/90'
-                      : 'bg-muted text-muted-foreground cursor-not-allowed'
+                      : 'bg-amber-500/90 hover:bg-amber-400'
                   }`}
                 >
-                  <Plus className="w-4 h-4" /> Generate
+                  <Plus className="w-4 h-4" /> {cryptoAvailable ? 'Generate' : 'Generate (fallback)'}
                 </button>
               </div>
 
@@ -190,7 +189,7 @@ export default function DashboardPage() {
 
               {!cryptoAvailable && (
                 <div className="mt-3 text-xs text-yellow-300">
-                  Invite generation is disabled in this browser (missing crypto.randomUUID).
+                  Invite generation is using a fallback generator (crypto.randomUUID not available).
                 </div>
               )}
               {copied && (
