@@ -6,15 +6,12 @@ import { useAuthStore } from '@/store/authStore';
 
 export default function Home() {
   const router = useRouter();
-  const { currentUser, loadFromStorage, isLoaded } = useAuthStore((state) => ({
-    currentUser: state.currentUser,
-    isLoaded: state.isLoaded,
-    loadFromStorage: state.loadFromStorage,
-  }));
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const isLoaded = useAuthStore((state) => state.isLoaded);
 
   useEffect(() => {
-    loadFromStorage();
-  }, [loadFromStorage]);
+    useAuthStore.getState().loadFromStorage();
+  }, []);
 
   useEffect(() => {
     if (!isLoaded) return;

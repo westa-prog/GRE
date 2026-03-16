@@ -20,7 +20,6 @@ export function Timer({ initialSeconds = 0, onExpire, isPaused = false }: TimerP
         // If it was counting down and reached 0
         if (initialSeconds > 0 && s === 0) {
           clearInterval(interval);
-          if (onExpire) onExpire();
           return 0;
         }
         
@@ -30,7 +29,13 @@ export function Timer({ initialSeconds = 0, onExpire, isPaused = false }: TimerP
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isPaused, initialSeconds, onExpire]);
+  }, [isPaused, initialSeconds]);
+
+  useEffect(() => {
+    if (seconds === 0 && initialSeconds > 0 && onExpire) {
+      onExpire();
+    }
+  }, [seconds, initialSeconds, onExpire]);
 
   const formatTime = (totalSeconds: number) => {
     const m = Math.floor(Math.abs(totalSeconds) / 60);

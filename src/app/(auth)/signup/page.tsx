@@ -8,12 +8,9 @@ import { Lock, User, Key } from 'lucide-react';
 
 export default function SignupPage() {
   const router = useRouter();
-  const { currentUser, isLoaded, signup, loadFromStorage } = useAuthStore((state) => ({
-    currentUser: state.currentUser,
-    isLoaded: state.isLoaded,
-    signup: state.signup,
-    loadFromStorage: state.loadFromStorage,
-  }));
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const isLoaded = useAuthStore((state) => state.isLoaded);
+  const signup = useAuthStore((state) => state.signup);
 
   const [inviteCode, setInviteCode] = useState('');
   const [requiresInvite, setRequiresInvite] = useState(true);
@@ -31,8 +28,8 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadFromStorage();
-  }, [loadFromStorage]);
+    useAuthStore.getState().loadFromStorage();
+  }, []);
 
   useEffect(() => {
     if (isLoaded && currentUser) {

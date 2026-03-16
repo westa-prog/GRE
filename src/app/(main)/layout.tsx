@@ -12,15 +12,12 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { currentUser, isLoaded, loadFromStorage } = useAuthStore((state) => ({
-    currentUser: state.currentUser,
-    isLoaded: state.isLoaded,
-    loadFromStorage: state.loadFromStorage,
-  }));
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const isLoaded = useAuthStore((state) => state.isLoaded);
 
   useEffect(() => {
-    loadFromStorage();
-  }, [loadFromStorage]);
+    useAuthStore.getState().loadFromStorage();
+  }, []);
 
   useEffect(() => {
     if (!isLoaded) return;

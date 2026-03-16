@@ -281,5 +281,125 @@ export const verbalQuestions: Question[] = [
     correctAnswer: 'Highlighted the complexity of gene-environment interactions.',
     explanation: 'The passage states that the interaction is "far more complex" and emphasizes "plasticity," directly supporting option C.',
     topic: 'Reading Comprehension'
+  },
+  {
+    id: 'q42',
+    type: 'verbal',
+    format: 'text-completion',
+    difficulty: 4,
+    content: 'The politician\'s speech was remarkably (i)_____; instead of outlining a clear policy, she offered a series of (ii)_____ statements that pleased everyone but committed her to nothing.',
+    options: ['decisive', 'equivocal', 'candid', 'substantive', 'nebulous', 'prescriptive'],
+    correctAnswer: ['equivocal', 'nebulous'],
+    explanation: '"Instead of outlining a clear policy" suggests ambiguity. "Equivocal" means open to multiple interpretations. "Nebulous" means vague or ill-defined, matching the idea of "pleased everyone but committed her to nothing."',
+    topic: 'Text Completion'
+  },
+  {
+    id: 'q43',
+    type: 'verbal',
+    format: 'sentence-equivalence',
+    difficulty: 3,
+    content: 'The committee\'s decision to cut funding for the arts was met with _____ from local artists, who staged daily protests outside the municipal building.',
+    options: ['opprobrium', 'adulation', 'acrimony', 'veneration', 'indifference', 'apathy'],
+    correctAnswer: ['opprobrium', 'acrimony'],
+    explanation: 'Daily protests indicate a strong negative reaction. "Opprobrium" (harsh criticism/censure) and "acrimony" (bitterness/ill feeling) both reflect this anger and produce equivalent sentences.',
+    topic: 'Sentence Equivalence'
+  },
+  {
+    id: 'q44',
+    type: 'verbal',
+    format: 'multiple-choice',
+    difficulty: 5,
+    content: 'Passage: Literary modernism, which reached its zenith in the 1920s, was characterized by a self-conscious break with traditional ways of writing. Modernists experimented with literary form and expression, exemplified by Ezra Pound\'s maxim to "Make it new." This movement was driven by a conscious desire to overturn traditional modes of representation and express the new sensibilities of their time. The horrors of World War I, in particular, catalyzed this shift, as the catastrophic loss of life rendered old forms of artistic expression seemingly inadequate or complicit in the civilizational failure.\n\nThe passage suggests which of the following about literary modernism?',
+    options: [
+      'It was primarily motivated by a desire to return to classical literary forms.',
+      'Its experimental nature was partly a reaction to unprecedented historical trauma.',
+      'It achieved its greatest popularity immediately before the outbreak of World War I.',
+      'Its practitioners believed that art should be completely divorced from historical events.',
+      'It rejected Ezra Pound\'s assertion that literature needed to be continually reinvented.'
+    ],
+    correctAnswer: 'Its experimental nature was partly a reaction to unprecedented historical trauma.',
+    explanation: 'The passage directly states that the horrors of World War I (a historical trauma) "catalyzed this shift" toward new forms of expression. B correctly synthesizes this point.',
+    topic: 'Reading Comprehension'
+  },
+  {
+    id: 'q45',
+    type: 'verbal',
+    format: 'text-completion',
+    difficulty: 5,
+    content: 'While the board\'s initial reaction to the proposal was (i)_____, their attitude became increasingly (ii)_____ as they realized the full financial implications of the project, leading eventually to a unanimous vote of rejection.',
+    options: ['hostile', 'lukewarm', 'enthusiastic', 'intransigent', 'amenable', 'sanguine'],
+    correctAnswer: ['enthusiastic', 'intransigent'],
+    explanation: 'The sentence describes a shift from an initial state to eventual unanimous rejection ("intransigent," meaning uncompromising). The contrast ("While") implies the initial reaction was positive ("enthusiastic") before turning negative.',
+    topic: 'Text Completion'
+  },
+  {
+    id: 'q46',
+    type: 'verbal',
+    format: 'sentence-equivalence',
+    difficulty: 4,
+    content: 'The new employee\'s _____ behavior at the corporate retreat alienated her colleagues, who preferred a more understated and professional demeanor.',
+    options: ['decorous', 'ostentatious', 'demure', 'flamboyant', 'retiring', 'obsequious'],
+    correctAnswer: ['ostentatious', 'flamboyant'],
+    explanation: 'Colleagues preferred an "understated" demeanor, meaning the employee\'s behavior was the opposite. "Ostentatious" and "flamboyant" both mean showy or excessively noticeable.',
+    topic: 'Sentence Equivalence'
+  },
+  {
+    id: 'q47',
+    type: 'verbal',
+    format: 'multiple-choice',
+    difficulty: 4,
+    content: 'Passage: In biological taxonomy, convergent evolution describes the independent evolution of similar features in species of different lineages. Convergent evolution creates analogous structures that have similar form or function but were not present in the last common ancestor of those groups. The cladistic term for the same phenomenon is homoplasy. For example, the wings of bats, birds, and insects evolved independently but serve the same aerodynamic function.\n\nAccording to the passage, analogous structures:',
+    options: [
+      'Are inherited from a recent common ancestor.',
+      'Serve identical functions but have completely different physical forms.',
+      'Result from convergent evolution in different lineages.',
+      'Are the defining characteristic of cladistic classification.',
+      'Evolve only in species that share a similar habitat.'
+    ],
+    correctAnswer: 'Result from convergent evolution in different lineages.',
+    explanation: 'The passage explicitly states: "Convergent evolution creates analogous structures..." and that it "describes the independent evolution of similar features in species of different lineages." Option C accurately reflects this.',
+    topic: 'Reading Comprehension'
+  },
+  {
+    id: 'q48',
+    type: 'verbal',
+    format: 'text-completion',
+    difficulty: 4,
+    content: 'Because the evidence was so (i)_____, the jury found it impossible to reach a definitive verdict; the prosecutor\'s case relied entirely on (ii)_____ rather than concrete proof.',
+    options: ['compelling', 'ambiguous', 'voluminous', 'hearsay', 'syllogisms', 'corroboration'],
+    correctAnswer: ['ambiguous', 'hearsay'],
+    explanation: 'An inability to reach a definitive verdict implies the evidence was unclear, or "ambiguous." The contrast with "concrete proof" points to "hearsay" (unverified information) as the basis of the prosecutor\'s case.',
+    topic: 'Text Completion'
+  },
+  {
+    id: 'q49',
+    type: 'verbal',
+    format: 'sentence-equivalence',
+    difficulty: 5,
+    content: 'The historian argued that the monarch was not a tyrant but rather a _____ ruler whose strict laws were necessary to maintain order in a chaotic realm.',
+    options: ['despotic', 'pragmatic', 'visionary', 'utilitarian', 'draconian', 'quixotic'],
+    correctAnswer: ['pragmatic', 'utilitarian'],
+    explanation: 'The contrast is with "tyrant." The ruler enacted strict laws because they were "necessary to maintain order," suggesting practicality rather than cruelty. "Pragmatic" and "utilitarian" both indicate a practical, functionality-driven approach.',
+    topic: 'Sentence Equivalence'
+  },
+  {
+    id: 'q50',
+    type: 'verbal',
+    format: 'multiple-select',
+    difficulty: 4,
+    content: 'Passage: Dark matter is a hypothetical form of matter thought to account for approximately 85% of the matter in the universe. Its presence is implied in a variety of astrophysical observations, including gravitational effects that cannot be explained by accepted theories of gravity unless more matter is present than can be seen. For this reason, most experts think dark matter is abundant in the universe and has had a strong influence on its structure and evolution. However, because dark matter does not interact with the electromagnetic field, it does not absorb, reflect, or emit electromagnetic radiation, making it difficult to detect.\n\nWhich of the following can be inferred from the passage? Select all that apply.',
+    options: [
+      'Dark matter exercises a gravitational pull on visible matter.',
+      'Scientists have directly observed dark matter using specialized telescopes.',
+      'Accepted theories of gravity are completely incorrect.',
+      'Dark matter emits a unique frequency of electromagnetic radiation.',
+      'The majority of the universe\'s matter is not directly visible.'
+    ],
+    correctAnswer: [
+      'Dark matter exercises a gravitational pull on visible matter.',
+      'The majority of the universe\'s matter is not directly visible.'
+    ],
+    explanation: 'The passage notes inferences from "gravitational effects" (supporting A) and states dark matter makes up 85% of matter but doesn\'t emit radiation/can\'t be seen (supporting E). Direct observation is contradicted by "difficult to detect," and the passage says it *does not* interact with the electromagnetic field.',
+    topic: 'Reading Comprehension'
   }
 ];

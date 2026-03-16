@@ -1,10 +1,13 @@
 'use client';
 
-import { Bell, Search, Settings } from 'lucide-react';
+import { Bell, Search, Settings, Sun, Moon } from 'lucide-react';
 import { useUserStore } from '@/store/userStore';
+import { useTheme } from '@/components/ui/ThemeProvider';
+import { StudyTimer } from '@/components/layout/StudyTimer';
 
 export function Header() {
-  const { stats } = useUserStore();
+  const stats = useUserStore((state) => state.stats);
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <header className="h-16 border-b border-border/50 bg-background/80 backdrop-blur-xl flex items-center justify-between px-6 sticky top-0 z-30">
@@ -20,6 +23,8 @@ export function Header() {
       </div>
       
       <div className="flex items-center gap-6">
+        <StudyTimer />
+        
         <div className="flex items-center gap-4 text-sm font-medium bg-secondary/30 px-4 py-1.5 rounded-full border border-border/50">
           <div className="flex items-center gap-2">
             <span className="text-muted-foreground">Target Quant:</span>
@@ -33,6 +38,17 @@ export function Header() {
         </div>
         
         <div className="flex items-center gap-3">
+          <button 
+            onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-secondary transition-colors"
+            title="Toggle Theme"
+          >
+            {theme === 'dark' ? (
+              <Sun className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
+            ) : (
+              <Moon className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
+            )}
+          </button>
           <button className="relative p-2 rounded-full hover:bg-secondary transition-colors">
             <Bell className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
             <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-destructive border-[1.5px] border-background"></span>

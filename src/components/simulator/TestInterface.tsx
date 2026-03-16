@@ -15,9 +15,7 @@ export function TestInterface() {
     currentSectionIndex, 
     sections, 
     timeRemaining, 
-    startTest, 
-    nextSection, 
-    tickTimer
+    startTest
   } = useTestStore();
 
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -31,14 +29,16 @@ export function TestInterface() {
     let interval: NodeJS.Timeout;
     if (status === 'in-progress' && timeRemaining > 0) {
       interval = setInterval(() => {
-        tickTimer();
+        const store = useTestStore.getState();
+        store.tickTimer();
       }, 1000);
     } else if (timeRemaining === 0 && status === 'in-progress') {
-      nextSection();
+      const store = useTestStore.getState();
+      store.nextSection();
       setCurrentQIndex(0);
     }
     return () => clearInterval(interval);
-  }, [status, timeRemaining, tickTimer, nextSection]);
+  }, [status, timeRemaining]);
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -145,7 +145,7 @@ export function TestInterface() {
                 if (currentQIndex < sectionQuestions.length - 1) {
                   setCurrentQIndex(currentQIndex + 1);
                 } else {
-                  nextSection();
+                  useTestStore.getState().nextSection();
                   setCurrentQIndex(0);
                 }
               }} 
@@ -210,7 +210,7 @@ export function TestInterface() {
               if (currentQIndex < sectionQuestions.length - 1) {
                 setCurrentQIndex(currentQIndex + 1);
               } else {
-                nextSection();
+                useTestStore.getState().nextSection();
                 setCurrentQIndex(0);
               }
             }}

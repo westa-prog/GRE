@@ -8,20 +8,17 @@ import { Lock, User } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { currentUser, isLoaded, login, loadFromStorage } = useAuthStore((state) => ({
-    currentUser: state.currentUser,
-    isLoaded: state.isLoaded,
-    login: state.login,
-    loadFromStorage: state.loadFromStorage,
-  }));
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const isLoaded = useAuthStore((state) => state.isLoaded);
+  const login = useAuthStore((state) => state.login);
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadFromStorage();
-  }, [loadFromStorage]);
+    useAuthStore.getState().loadFromStorage();
+  }, []);
 
   useEffect(() => {
     if (isLoaded && currentUser) {

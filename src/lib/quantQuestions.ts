@@ -224,5 +224,128 @@ export const quantQuestions: Question[] = [
     correctAnswer: ['17', '23', '29'],
     explanation: '17, 23, 29 are prime; 21=3*7, 27=3³.',
     topic: 'Number Properties'
+  },
+  {
+    id: 'q40',
+    type: 'quant',
+    format: 'multiple-choice',
+    difficulty: 3,
+    content: 'If 3x - y = 10 and x + y = 6, what is the value of x/y?',
+    options: ['1/2', '1', '2', '3', '4'],
+    correctAnswer: '2',
+    explanation: 'Add the two equations: 4x = 16, so x = 4. Substitute into second: 4 + y = 6, so y = 2. Then x/y = 4/2 = 2.',
+    topic: 'Algebra'
+  },
+  {
+    id: 'q41',
+    type: 'quant',
+    format: 'multiple-choice',
+    difficulty: 4,
+    content: 'A right circular cylinder has height 10 and radius 3.\n\nQuantity A: The volume of the cylinder\nQuantity B: The lateral volume of a 5x10x15 rectangular box\n\nWhich quantity is greater?',
+    options: [
+      'Quantity A is greater.',
+      'Quantity B is greater.',
+      'The two quantities are equal.',
+      'The relationship cannot be determined from the information given.'
+    ],
+    correctAnswer: 'Quantity B is greater.',
+    explanation: 'Quantity A = π*r²*h = π*9*10 = 90π ≈ 282.7. Quantity B (box volume) = 5*10*15 = 750. Quantity B is much greater.',
+    topic: 'Geometry'
+  },
+  {
+    id: 'q42',
+    type: 'quant',
+    format: 'numeric-entry',
+    difficulty: 5,
+    content: 'In how many ways can a president, vice president, and secretary be chosen from a club of 15 members?',
+    correctAnswer: '2730',
+    explanation: 'Permutations problem: 15 * 14 * 13 = 2730.',
+    topic: 'Combinatorics'
+  },
+  {
+    id: 'q43',
+    type: 'quant',
+    format: 'multiple-choice',
+    difficulty: 4,
+    content: 'A mixture of 40 liters of milk and water contains 10% water. How much water must be added to make it 20% water?',
+    options: ['4 liters', '5 liters', '6 liters', '8 liters', '10 liters'],
+    correctAnswer: '5 liters',
+    explanation: 'Initial mixture: 36L milk, 4L water. Let x be water added. New mixture = (4 + x) / (40 + x) = 0.20. Therefore 4 + x = 8 + 0.2x. 0.8x = 4 -> x = 5.',
+    topic: 'Word Problems'
+  },
+  {
+    id: 'q44',
+    type: 'quant',
+    format: 'multiple-choice',
+    difficulty: 4,
+    content: 'x and y are consecutive positive integers.\n\nQuantity A: xy\nQuantity B: (x+y)²',
+    options: [
+      'Quantity A is greater.',
+      'Quantity B is greater.',
+      'The two quantities are equal.',
+      'The relationship cannot be determined from the information given.'
+    ],
+    correctAnswer: 'Quantity B is greater.',
+    explanation: '(x+y)² = x² + 2xy + y². Since x and y are positive, x² + y² > 0. Thus (x+y)² is clearly greater than xy, as it expands to xy + x² + xy + y², which is > xy.',
+    topic: 'Algebra'
+  },
+  {
+    id: 'q45',
+    type: 'quant',
+    format: 'multiple-select',
+    difficulty: 3,
+    content: 'Which of the following lines are parallel to the line defined by 2y - 4x = 10? Select all that apply.',
+    options: ['y = 2x - 5', 'y = -2x + 10', '4y - 8x = 1', 'x = 2y - 5'],
+    correctAnswer: ['y = 2x - 5', '4y - 8x = 1'],
+    explanation: 'Original equation: 2y = 4x + 10 -> y = 2x + 5. The slope is 2. The first option is y = 2x - 5 (slope 2). The second is slope -2. The third is 4y = 8x + 1 -> y = 2x + 0.25 (slope 2). The fourth is 2y = x + 5 -> y = 0.5x + 2.5 (slope 0.5).',
+    topic: 'Coordinate Geometry'
+  },
+  {
+    id: 'q46',
+    type: 'quant',
+    format: 'multiple-choice',
+    difficulty: 5,
+    content: 'If the price of a stock decreased by 20% and then increased by 25%, what is the net change in its price?',
+    options: ['5% decrease', '5% increase', 'No change', '10% increase', 'Cannot be determined'],
+    correctAnswer: 'No change',
+    explanation: 'Let price be 100. Decrease by 20% -> 80. Increase by 25% means +20 (since 25% of 80 is 20) -> 100. Net change is 0.',
+    topic: 'Percentages'
+  },
+  {
+    id: 'q47',
+    type: 'quant',
+    format: 'numeric-entry',
+    difficulty: 3,
+    content: 'What is the sum of the interior angles of a regular octagon?',
+    correctAnswer: '1080',
+    explanation: 'Sum = (n - 2) * 180. For octagon n=8. (8 - 2) * 180 = 6 * 180 = 1080.',
+    topic: 'Geometry'
+  },
+  {
+    id: 'q48',
+    type: 'quant',
+    format: 'multiple-choice',
+    difficulty: 4,
+    content: 'If |2x - 3| < 5, which of the following represents all possible values of x?',
+    options: ['-1 < x < 4', '-4 < x < 1', 'x < 4', 'x > -1', '1 < x < 4'],
+    correctAnswer: '-1 < x < 4',
+    explanation: '-5 < 2x - 3 < 5. Add 3 to all sides: -2 < 2x < 8. Divide by 2: -1 < x < 4.',
+    topic: 'Algebra'
+  },
+  {
+    id: 'q49',
+    type: 'quant',
+    format: 'multiple-choice',
+    difficulty: 5,
+    content: 'Quantity A: The standard deviation of the set {10, 20, 30, 40}\nQuantity B: The standard deviation of the set {110, 120, 130, 140}',
+    options: [
+      'Quantity A is greater.',
+      'Quantity B is greater.',
+      'The two quantities are equal.',
+      'The relationship cannot be determined from the information given.'
+    ],
+    correctAnswer: 'The two quantities are equal.',
+    explanation: 'Adding a constant (100) to every item in a set shifts the mean but does not change the spacing between the numbers. Thus, the standard deviation remains exactly the same.',
+    topic: 'Statistics'
   }
 ];

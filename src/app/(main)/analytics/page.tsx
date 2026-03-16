@@ -6,6 +6,8 @@ import { ActivityBarChart } from '@/components/analytics/ActivityBarChart';
 import { WeaknessTable } from '@/components/analytics/WeaknessTable';
 import { ScoreChart } from '@/components/dashboard/ScoreChart';
 
+import { ExportPDFButton } from '@/components/analytics/ExportPDFButton';
+
 export default function AnalyticsPage() {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -19,6 +21,7 @@ export default function AnalyticsPage() {
             Deep dive into your performance metrics and weaknesses to optimize your prep.
           </p>
         </div>
+        <ExportPDFButton />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

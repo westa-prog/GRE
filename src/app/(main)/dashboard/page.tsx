@@ -33,11 +33,7 @@ function getLastSevenDays() {
 
 export default function DashboardPage() {
   const { stats } = useUserStore();
-  const { role, generateInviteCode, getInviteCodes } = useAuthStore((state) => ({
-    role: state.role,
-    generateInviteCode: state.generateInviteCode,
-    getInviteCodes: state.getInviteCodes,
-  }));
+  const role = useAuthStore((state) => state.role);
 
   const [inviteCodes, setInviteCodes] = useState<string[]>([]);
   const [copied, setCopied] = useState<string | null>(null);
@@ -45,21 +41,23 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (role === 'admin') {
-      setInviteCodes(getInviteCodes());
+      setInviteCodes(useAuthStore.getState().getInviteCodes());
     }
-  }, [getInviteCodes, role]);
+  }, [role]);
 
   useEffect(() => {
     setCryptoAvailable(typeof window !== 'undefined' && typeof window.crypto?.randomUUID === 'function');
   }, []);
 
-  const refreshInvites = () => setInviteCodes(getInviteCodes());
+  const refreshInvites = () => setInviteCodes(useAuthStore.getState().getInviteCodes());
 
   const handleGenerateInvite = () => {
-    const code = generateInviteCode();
+    const code = useAuthStore.getState().generateInviteCode();
     setCopied(code);
     refreshInvites();
-    navigator.clipboard.writeText(code).catch(() => {});
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(code).catch(() => {});
+    }
   };
 
   const lastSeven = getLastSevenDays();
@@ -175,7 +173,9 @@ export default function DashboardPage() {
                       <span className="font-mono text-sm text-foreground truncate">{code}</span>
                       <button
                         onClick={() => {
-                          navigator.clipboard.writeText(code).catch(() => {});
+                          if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+                            navigator.clipboard.writeText(code).catch(() => {});
+                          }
                           setCopied(code);
                         }}
                         className="inline-flex items-center gap-1 rounded-lg bg-primary/10 px-3 py-1 text-xs font-semibold text-primary hover:bg-primary/20 transition-colors"

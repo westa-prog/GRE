@@ -33,6 +33,7 @@ export function Flashcard({ word, onGrade }: FlashcardProps) {
 
   const playPronunciation = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
     const utterance = new SpeechSynthesisUtterance(word.word);
     utterance.lang = 'en-US';
     window.speechSynthesis.speak(utterance);

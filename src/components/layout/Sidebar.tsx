@@ -10,7 +10,8 @@ import {
   MonitorPlay, 
   BarChart3,
   Lightbulb,
-  LogOut
+  LogOut,
+  Trophy
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useState } from 'react';
@@ -24,17 +25,16 @@ const navItems = [
   { name: 'Simulator', href: '/simulator', icon: MonitorPlay },
   { name: 'Analytics', href: '/analytics', icon: BarChart3 },
   { name: 'Resources & Tips', href: '/resources', icon: Lightbulb },
+  { name: 'Leaderboard', href: '/leaderboard', icon: Trophy },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
   const [isHovered, setIsHovered] = useState(false);
-  const { currentUser, membership, role, logout } = useAuthStore((state) => ({
-    currentUser: state.currentUser,
-    membership: state.membership,
-    role: state.role,
-    logout: state.logout,
-  }));
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const membership = useAuthStore((state) => state.membership);
+  const role = useAuthStore((state) => state.role);
+  const logout = useAuthStore((state) => state.logout);
 
   return (
     <aside 
