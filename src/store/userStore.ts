@@ -18,17 +18,35 @@ export const initialStats: UserStats = {
   topicMastery: {},
 };
 
-function loadUsers(): Record<string, { password: string; membership?: string; stats: UserStats }> {
-  if (typeof window === 'undefined') return {};
-  try {
-    const raw = window.localStorage.getItem(USERS_KEY);
-    return raw ? (JSON.parse(raw) as Record<string, { password: string; membership?: string; stats: UserStats }>) : {};
-  } catch {
-    return {};
+function loadUsers(): Record<string, { username?: string; password: string; membership?: string; role?: string; stats: UserStats }> {
+  let users: Record<string, { username?: string; password: string; membership?: string; role?: string; stats: UserStats }> = {};
+  if (typeof window !== 'undefined') {
+    try {
+      const raw = window.localStorage.getItem(USERS_KEY);
+      if (raw) users = JSON.parse(raw);
+    } catch {
+      users = {};
+    }
   }
+
+  // Seed default admin account
+  if (!users['Sunnatilla']) {
+    users['Sunnatilla'] = {
+      username: 'Sunnatilla',
+      password: '7799',
+      membership: 'Admin',
+      role: 'admin',
+      stats: initialStats,
+    };
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    }
+  }
+
+  return users;
 }
 
-function saveUsers(users: Record<string, { password: string; membership?: string; stats: UserStats }>) {
+function saveUsers(users: Record<string, { username?: string; password: string; membership?: string; role?: string; stats: UserStats }>) {
   if (typeof window === 'undefined') return;
   window.localStorage.setItem(USERS_KEY, JSON.stringify(users));
 }

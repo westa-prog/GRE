@@ -11,7 +11,8 @@ import {
   BarChart3,
   Lightbulb,
   LogOut,
-  Trophy
+  Trophy,
+  Shield
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useState } from 'react';
@@ -60,8 +61,13 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 space-y-2 py-6 px-3 relative overflow-hidden">
-        {navItems.map((item) => {
-          const isActive = pathname.startsWith(item.href) || (pathname === '/' && item.href === '/dashboard');
+        {(() => {
+          const items = [...navItems];
+          if (role === 'admin') {
+            items.push({ name: 'Admin Panel', href: '/admin/users', icon: Shield });
+          }
+          return items.map((item) => {
+            const isActive = pathname.startsWith(item.href) || (pathname === '/' && item.href === '/dashboard');
           return (
             <Link
               key={item.name}
@@ -86,7 +92,7 @@ export function Sidebar() {
               )}
             </Link>
           );
-        })}
+        })})()}
       </nav>
       
       <div className="p-4 border-t border-border/50">

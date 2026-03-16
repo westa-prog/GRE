@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+// Link import removed
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { Lock, User } from 'lucide-react';
@@ -83,14 +83,6 @@ export default function LoginPage() {
           Sign in
         </button>
       </form>
-
-      <div className="mt-6 text-center text-sm text-muted-foreground">
-        Don&apos;t have an account?{' '}
-        <Link href="/signup" className="text-primary font-semibold hover:underline">
-          Create one
-        </Link>
-        .
-      </div>
     </div>
   );
 }

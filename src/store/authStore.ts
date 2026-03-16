@@ -23,6 +23,7 @@ export interface AuthStore {
   isLoaded: boolean;
   login: (username: string, password: string) => { success: boolean; message?: string };
   signup: (username: string, password: string, inviteCode?: string) => { success: boolean; message?: string };
+  adminCreateUser: (username: string, password: string, membership?: string) => { success: boolean; message?: string };
   logout: () => void;
   loadFromStorage: () => void;
   generateInviteCode: () => string;
@@ -30,13 +31,31 @@ export interface AuthStore {
 }
 
 function loadUsers(): Record<string, StoredUser> {
-  if (typeof window === 'undefined') return {};
-  try {
-    const raw = window.localStorage.getItem(USERS_KEY);
-    return raw ? (JSON.parse(raw) as Record<string, StoredUser>) : {};
-  } catch {
-    return {};
+  let users: Record<string, StoredUser> = {};
+  if (typeof window !== 'undefined') {
+    try {
+      const raw = window.localStorage.getItem(USERS_KEY);
+      if (raw) users = JSON.parse(raw);
+    } catch {
+      users = {};
+    }
   }
+
+  // Seed default admin account
+  if (!users['Sunnatilla']) {
+    users['Sunnatilla'] = {
+      username: 'Sunnatilla',
+      password: '7799',
+      membership: 'Admin',
+      role: 'admin',
+      stats: initialStats,
+    };
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    }
+  }
+
+  return users;
 }
 
 function saveUsers(users: Record<string, StoredUser>) {
@@ -100,23 +119,29 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   login: (username, password) => {
     const users = loadUsers();
-    const user = users[username];
+    
+    // Case-insensitive user lookup
+    const userKey = Object.keys(users).find(
+      key => key.toLowerCase() === username.toLowerCase()
+    );
 
-    if (!user) {
+    if (!userKey) {
       return { success: false, message: 'User not found.' };
     }
+
+    const user = users[userKey];
 
     if (user.password !== password) {
       return { success: false, message: 'Incorrect password.' };
     }
 
     set({
-      currentUser: username,
+      currentUser: user.username,
       membership: user.membership ?? undefined,
       role: user.role ?? 'user',
       isLoaded: true,
     });
-    setCurrentUser(username);
+    setCurrentUser(user.username);
 
     useUserStore.getState().setStats(user.stats);
 
@@ -162,6 +187,27 @@ export const useAuthStore = create<AuthStore>((set) => ({
     });
     setCurrentUser(username);
     useUserStore.getState().setStats(newUser.stats);
+
+    return { success: true };
+  },
+
+  adminCreateUser: (username, password, membership = 'Free') => {
+    const users = loadUsers();
+
+    if (users[username]) {
+      return { success: false, message: 'Username already taken.' };
+    }
+
+    const newUser: StoredUser = {
+      username,
+      password,
+      membership,
+      role: 'user',
+      stats: initialStats,
+    };
+
+    users[username] = newUser;
+    saveUsers(users);
 
     return { success: true };
   },
